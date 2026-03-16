@@ -1,190 +1,167 @@
-# Cojaisy — AI Health & Nutrition Assistant
+<div align="center">
 
-> An AI-powered lifestyle companion for Indian households — voice-first, multilingual,
-> and built entirely on serverless AWS infrastructure.
+# 🥗 Cojaisy
+### AI Health & Nutrition Assistant
 
-**Platform:** Android (Flutter)
-**Backend:** AWS Serverless (SAM)
-**AI Engine:** Amazon Bedrock (Nova Chat, Nova Text, Nova Vision)
-**Current Version:** 1.0.92+97
-**Region:** ap-south-1 (Mumbai)
-**Status:** 🟢 Live in Production
+*Voice-first. Multilingual. Built for India.*
+
+[![Flutter](https://img.shields.io/badge/Flutter-Android-02569B?style=flat&logo=flutter&logoColor=white)](https://flutter.dev)
+[![AWS SAM](https://img.shields.io/badge/AWS_SAM-Serverless-FF9900?style=flat&logo=amazonaws&logoColor=white)](https://aws.amazon.com/serverless/sam)
+[![Amazon Bedrock](https://img.shields.io/badge/Amazon_Bedrock-Nova_Chat_·_Vision_·_Text-7B2D8B?style=flat&logo=amazonaws&logoColor=white)](https://aws.amazon.com/bedrock)
+[![DynamoDB](https://img.shields.io/badge/DynamoDB-12_Tables-4053D6?style=flat&logo=amazondynamodb&logoColor=white)](https://aws.amazon.com/dynamodb)
+[![Version](https://img.shields.io/badge/Version-1.0.92%2B97-blue?style=flat)](.)
+[![Status](https://img.shields.io/badge/Status-🟢_Live_in_Production-brightgreen?style=flat)](.)
+[![Region](https://img.shields.io/badge/Region-ap--south--1_Mumbai-orange?style=flat)](.)
+
+</div>
 
 ---
 
 ## The Problem
 
-Most nutrition and health apps are built for Western diets and English speakers.
-Indian users — with diverse regional cuisines, 6+ languages, and family-centric
-eating habits — are underserved by generic calorie trackers.
+Most nutrition and health apps are built for Western diets and English speakers. Indian users — with diverse regional cuisines, 6+ languages, and family-centric eating habits — are completely underserved by generic calorie trackers.
 
-Cojaisy solves this by combining:
-- Deep Indian food knowledge (vegetarian, egg, non-veg, vegan recipe databases)
-- Multilingual voice AI (6 Indian languages)
-- Personalized meal planning and shelf management
-- A fully serverless, cost-optimized AWS backend
+**Cojaisy is built for India, not adapted for it.**
+
+- Indian food calorie database (not generic Western data)
+- 6 regional languages with natural voice responses
+- Phone-based auth — no email required (matches Indian user behaviour)
+- Indian payment gateway (Razorpay) with UPI + card + netbanking
+- Recipes seeded with vegetarian, egg, non-veg, and vegan Indian cuisine
 
 ---
 
-## Product Features
+## What It Does
 
-### AI Chat & Voice Assistant
-- Natural language health and nutrition Q&A
-- Voice input + voice response (AWS Transcribe + AWS Polly)
-- 6 Indian languages: English, Hindi, Tamil, Telugu, Malayalam, Kannada
-- Context-aware responses using user's shelf, meal history, and health goals
-- Intent detection: add to shelf, generate recipe, plan meals — all via voice
-
-### Smart Recipe Engine
-- AI-generated recipes using Amazon Bedrock (Nova)
-- Recipes tailored to shelf inventory, dietary preference, and health goals
-- Pre-seeded recipe database: vegetarian, egg, non-veg, vegan (Indian cuisine)
-- Photo-based food recognition using Bedrock Vision (Nova Vision)
-
-### Meal Planner
-- Daily and weekly meal planning
-- Nutrition tracking per meal (calories, macros)
-- Indian calorie database (local food items)
-- Bulk review and approval flow
-
-### MyShelf (Pantry Manager)
-- Track ingredients and pantry items
-- AI-powered shelf-to-recipe suggestions
-- Voice commands to add/check items
-
-### Nutrition Logging
-- Manual food logging with calorie lookup
-- Photo capture and AI-based food identification
-- Daily nutrition summary and health insights
-
-### Wellness Reminders
-- Scheduled wellness notifications (Android local notifications)
-- Step counter integration (pedometer)
-- Health insights screen
-
-### Subscription & Monetisation
-- Free tier with usage limits
-- Wellness tier: ₹99/month (Razorpay recurring subscriptions)
-- FamilyCare tier: ₹499/month (up to 5 family members, shared limits)
-- Usage tracking per user per month (voice, photo, recipe counts)
-- Upgrade prompts with tier comparison
-
-### Admin Control Panel
-- React web app hosted on S3 + CloudFront
-- User management, subscription analytics, AI usage stats
-- Infrastructure health monitoring (Lambda, DynamoDB, API Gateway, Bedrock)
-- Audit logs and cost analytics
+| Feature | Description |
+|---------|-------------|
+| 🎤 **Voice Assistant** | Ask health questions, add shelf items, generate recipes — all by voice in 6 Indian languages |
+| 🤖 **AI Chat** | Context-aware health & nutrition Q&A powered by Amazon Bedrock Nova |
+| 📸 **Food Recognition** | Photograph a meal — AI identifies the food and estimates calories (Bedrock Vision) |
+| 🍳 **Recipe Engine** | AI generates personalised Indian recipes from your pantry inventory |
+| 📅 **Meal Planner** | Daily and weekly meal planning with nutrition tracking |
+| 🥫 **MyShelf** | Smart pantry manager — track ingredients, get recipe suggestions |
+| 📊 **Nutrition Logging** | Manual + photo-based food logging with Indian calorie database |
+| 🔔 **Wellness Reminders** | Scheduled notifications + step counter integration |
+| 💳 **Subscriptions** | Free → Wellness (₹99/mo) → FamilyCare (₹499/mo) via Razorpay recurring billing |
+| 🖥️ **Admin Dashboard** | React web app on S3 + CloudFront — user management, analytics, infrastructure health |
 
 ---
 
 ## Technology Stack
 
-### Mobile (Frontend)
+### 📱 Mobile App (Flutter / Android)
+
 | Layer | Technology |
 |-------|-----------|
-| Framework | Flutter (Dart) — Android |
+| Framework | Flutter (Dart) |
 | State Management | Provider |
-| Auth | AWS Amplify + Amazon Cognito |
-| Payments | Razorpay Flutter SDK |
-| Voice | AWS Transcribe (STT) + AWS Polly (TTS) |
+| Authentication | AWS Amplify + Amazon Cognito |
+| Payments | Razorpay Flutter SDK (recurring subscriptions) |
+| Voice Input | AWS Transcribe (Speech-to-Text) |
+| Voice Output | AWS Polly (Text-to-Speech) |
 | Notifications | flutter_local_notifications |
-| Storage | shared_preferences (user-scoped) |
-| Image | image_picker + flutter_image_compress |
+| Local Storage | shared_preferences (user-scoped isolation) |
+| Image Handling | image_picker + flutter_image_compress |
 | Step Counter | pedometer |
 
-### Backend (AWS Serverless)
+### ☁️ Backend (AWS Serverless)
+
 | Layer | Technology |
 |-------|-----------|
-| Runtime | Node.js 20.x on arm64 (Graviton2) |
-| IaC | AWS SAM (CloudFormation) |
-| API | Amazon API Gateway (REST) with Cognito authorizer |
+| Runtime | Node.js 20.x · arm64 Graviton2 |
+| Infrastructure as Code | AWS SAM (CloudFormation) |
+| API | Amazon API Gateway (REST) + Cognito JWT Authorizer |
 | Compute | 13 AWS Lambda functions |
 | Database | 12 Amazon DynamoDB tables (on-demand) |
-| Auth | Amazon Cognito User Pool (phone + OTP) |
+| Authentication | Amazon Cognito User Pool (phone + OTP) |
 | OTP Delivery | Fast2SMS (Indian SMS gateway) |
-| AI | Amazon Bedrock — Nova Chat, Nova Text, Nova Vision |
-| Voice STT | AWS Transcribe (6 Indian languages) |
-| Voice TTS | AWS Polly (Standard + Neural voices) |
-| Storage | Amazon S3 (food photos + admin dashboard) |
-| Secrets | AWS Secrets Manager (Razorpay keys) |
-| Monitoring | Amazon CloudWatch Logs, Metrics, X-Ray |
+| AI Engine | Amazon Bedrock — Nova Chat · Nova Text · Nova Vision |
+| Voice STT | AWS Transcribe (6 Indian languages, auto-detect) |
+| Voice TTS | AWS Polly (Standard + Neural voices, tier-based) |
+| Storage | Amazon S3 (food photos + voice audio cache) |
+| Secrets | AWS Secrets Manager (Razorpay credentials) |
+| Monitoring | CloudWatch Logs · Metrics · X-Ray tracing |
 | CDN | Amazon CloudFront (admin dashboard) |
-| CI/CD | GitHub Actions |
+| CI/CD | GitHub Actions → SAM Deploy |
 
-### Admin Dashboard (Web)
+### 🖥️ Admin Dashboard (React / Web)
+
 | Layer | Technology |
 |-------|-----------|
 | Framework | React |
 | Hosting | Amazon S3 + CloudFront |
-| Auth | Amazon Cognito (admin-only user pool) |
-| Data | DynamoDB via admin Lambda |
+| Authentication | Amazon Cognito (admin-only user pool, MFA) |
+| Backend | admin-handler Lambda + DynamoDB |
 
 ---
 
 ## Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                     Flutter Android App                          │
-│  Auth │ Voice │ Chat │ Recipes │ Shelf │ Meals │ Subscriptions  │
-└───────────────────────┬─────────────────────────────────────────┘
-                        │ HTTPS (JWT via Cognito)
-                        ▼
-┌─────────────────────────────────────────────────────────────────┐
-│              Amazon API Gateway (REST API)                       │
-│              Cognito Authorizer (phone + OTP)                    │
-└──────┬──────┬──────┬──────┬──────┬──────┬──────┬───────────────┘
-       │      │      │      │      │      │      │
-       ▼      ▼      ▼      ▼      ▼      ▼      ▼
-  auth   user  recipe meal  shelf  voice  bedrock  subscription
-  λ      λ     λ      plan  item   λ      ai-λ     λ
-                      λ     λ
-       │      │      │      │      │      │      │
-       └──────┴──────┴──────┴──────┴──────┴──────┘
-                        │
-              ┌─────────┴──────────┐
-              ▼                    ▼
-        DynamoDB (12 tables)   Amazon S3
-        (users, recipes,       (food photos,
-         meals, shelf,          audio cache)
-         subscriptions...)
-                        │
-              ┌─────────┴──────────┐
-              ▼                    ▼
-        Amazon Bedrock         AWS Transcribe
-        Nova Chat/Text/Vision  + AWS Polly
-        (AI responses,         (Voice I/O,
-         recipe gen,            6 languages)
-         food recognition)
+┌──────────────────────────────────────────────────────────────────┐
+│                    Flutter Android App                            │
+│   Auth · Voice · Chat · Recipes · Shelf · Meals · Subscriptions  │
+└────────────────────────┬─────────────────────────────────────────┘
+                         │  HTTPS + Cognito JWT
+                         ▼
+┌──────────────────────────────────────────────────────────────────┐
+│             Amazon API Gateway  (REST API)                        │
+│             Cognito Authorizer · Request Validation · CORS        │
+└──┬──────┬──────┬──────┬──────┬──────┬──────┬──────┬─────────────┘
+   │      │      │      │      │      │      │      │
+   ▼      ▼      ▼      ▼      ▼      ▼      ▼      ▼
+ auth   user  recipe  meal  shelf  voice bedrock  sub
+  λ      λ     λ      plan   item    λ    ai-λ    λ
+                       λ      λ
+   │      │      │      │      │      │      │      │
+   └──────┴──────┴──────┴──────┴──────┴──────┴──────┘
+                         │
+             ┌───────────┴────────────┐
+             ▼                        ▼
+      DynamoDB (12 tables)        Amazon S3
+      users · recipes · meals     food photos
+      shelf · subscriptions       voice cache
+      conversations · logs
+             │
+   ┌─────────┴──────────┐
+   ▼                    ▼
+Amazon Bedrock      AWS Transcribe
+Nova Chat/Text/     + AWS Polly
+Vision              (Voice I/O,
+(AI · recipes ·      6 languages)
+ food recognition)
 ```
 
 ### Lambda Functions (13)
+
 | Function | Purpose | Memory | Timeout |
-|----------|---------|--------|---------|
-| auth-handler | Phone OTP auth via Fast2SMS | 256MB | 10s |
+|----------|---------|:------:|:-------:|
+| auth-handler | Phone OTP auth via Fast2SMS + Cognito custom challenge | 256MB | 10s |
 | user-handler | User profile CRUD | 256MB | 10s |
-| conversation-handler | Chat session management | 256MB | 10s |
-| message-handler | Chat message processing | 256MB | 10s |
-| recipe-handler | Recipe CRUD + AI generation | 256MB | 10s |
-| meal-plan-handler | Meal planning + nutrition | 256MB | 10s |
-| nutrition-log-handler | Food logging + calorie tracking | 256MB | 10s |
+| conversation-handler | AI chat session management | 256MB | 10s |
+| message-handler | Chat message processing + history | 256MB | 10s |
+| recipe-handler | Recipe CRUD + Bedrock AI generation | 256MB | 10s |
+| meal-plan-handler | Meal planning + nutrition tracking | 256MB | 10s |
+| nutrition-log-handler | Food logging + calorie lookup | 256MB | 10s |
 | shelf-item-handler | Pantry/shelf management | 256MB | 10s |
-| voice-handler | STT + TTS + voice AI pipeline | 512MB | 30s |
-| bedrock-ai-handler | Bedrock AI orchestration | 512MB | 30s |
+| voice-handler | STT + AI + TTS full pipeline | 512MB | 30s |
+| bedrock-ai-handler | Bedrock orchestration (chat + vision) | 512MB | 30s |
 | subscription-handler | Razorpay subscriptions + webhooks | 256MB | 15s |
 | alarm-handler | Wellness reminders + scheduling | 128MB | 10s |
-| admin-handler | Admin dashboard APIs | 256MB | 10s |
+| admin-handler | Admin dashboard APIs + analytics | 256MB | 10s |
 
 ### DynamoDB Tables (12)
+
 | Table | Purpose |
 |-------|---------|
-| kiro-users | User profiles, subscription tier, health goals |
-| kiro-auth-tokens | OTP tokens, session management |
+| kiro-users | Profiles, subscription tier, health goals, usage counters |
+| kiro-auth-tokens | OTP tokens with 5-min TTL (auto-deleted) |
 | kiro-conversations | AI chat sessions |
-| kiro-messages | Chat message history |
-| kiro-recipes | Recipe library (user + AI-generated) |
+| kiro-messages | Chat message history (context window) |
+| kiro-recipes | Recipe library (user-created + AI-generated) |
 | kiro-meal-plans | Daily/weekly meal plans |
-| kiro-nutrition-logs | Food logs with calorie data |
+| kiro-nutrition-logs | Food logs with calorie + macro data |
 | kiro-shelf-items | Pantry inventory |
 | kiro-subscriptions | Razorpay subscription records |
 | kiro-alarms | Wellness reminder schedules |
@@ -195,204 +172,159 @@ Cojaisy solves this by combining:
 
 ## Authentication Flow
 
-Phone-based OTP authentication — no passwords, no email required.
+Phone-only OTP — no passwords, no email required.
 
 ```
 User enters phone number
         ↓
-Lambda triggers Fast2SMS OTP delivery
+Cognito CUSTOM_AUTH flow initiated
         ↓
-Cognito Custom Auth Challenge (define → create → verify)
+cognito-create-auth-challenge Lambda
+  → generates 6-digit OTP
+  → calls Fast2SMS API (Indian SMS delivery)
+  → stores OTP in DynamoDB (5-min TTL)
         ↓
-OTP verified → Cognito issues JWT tokens
+User enters OTP
         ↓
-Flutter stores tokens (user-scoped local storage)
+cognito-verify-auth-challenge Lambda validates
         ↓
-All API calls use JWT in Authorization header
+Cognito issues: id_token + access_token + refresh_token (JWT)
+        ↓
+Flutter stores tokens in user-scoped local storage
+        ↓
+All API calls: Authorization: Bearer <access_token>
 ```
-
-Custom Cognito triggers:
-- `cognito-define-auth-challenge` — defines the OTP challenge flow
-- `cognito-create-auth-challenge` — generates OTP + calls Fast2SMS
-- `cognito-verify-auth-challenge` — validates OTP input
 
 ---
 
 ## Voice AI Pipeline
 
 ```
-User speaks (Flutter audio recorder)
+Flutter AudioRecorder → m4a audio
         ↓
-Audio uploaded to S3 (m4a/wav/webm)
+Upload to S3: voice-input/{user_id}/{timestamp}.m4a
         ↓
-voice-handler Lambda triggered
+voice-handler Lambda
         ↓
-AWS Transcribe → text (language auto-detected)
+AWS Transcribe (batch) — auto-detects language
+  Supported: en-IN · hi-IN · ta-IN · te-IN · ml-IN · kn-IN
         ↓
-bedrock-ai-handler → Amazon Bedrock Nova Chat
+bedrock-ai-handler — Amazon Bedrock Nova Chat
+  Context: user's shelf + meal history + health goals
+  Response: max 200 words (voice-optimised)
+  Intent: add_to_shelf | generate_recipe | meal_plan | general
         ↓
-AI response text
+AWS Polly TTS
+  Free tier  → Standard voice
+  Paid tiers → Neural voice (more natural)
         ↓
-AWS Polly → audio (Standard or Neural voice)
+Audio cached in S3 (24h TTL, keyed by response hash)
         ↓
-Audio cached in S3 (24h TTL)
-        ↓
-Flutter plays response audio
+Flutter plays audio via pre-signed URL
 ```
 
-Cost optimisations in the voice pipeline:
-- Audio response caching (70% cost reduction)
-- Response length limiting to 200 words
-- Batch transcription (50% cheaper than streaming)
-- Tier-based voice quality (Standard for Free, Neural for paid)
+**Cost optimisations in the voice pipeline:**
+
+| Optimisation | Saving |
+|-------------|--------|
+| Audio response caching (24h) | ~70% TTS cost reduction |
+| Response length cap (200 words) | ~60% Polly cost reduction |
+| Batch transcription (not streaming) | ~50% Transcribe cost reduction |
+| Tier-based voice quality | Standard for Free, Neural for paid |
 
 ---
 
-## Subscription Architecture
+## Subscription Tiers
 
-```
-User selects tier → POST /subscriptions/create
-        ↓
-subscription-handler creates Razorpay subscription
-        ↓
-Flutter opens Razorpay checkout (recurring billing)
-        ↓
-User authorises ₹99/month or ₹499/month
-        ↓
-POST /subscriptions/verify → signature verified
-        ↓
-DynamoDB: user tier updated, usage counters reset
-        ↓
-Monthly: Razorpay webhook → subscription.charged
-        ↓
-Lambda resets usage counters, extends subscription
-```
+| | Free | Wellness ₹99/mo | FamilyCare ₹499/mo |
+|--|:----:|:---------------:|:-----------------:|
+| Voice queries/month | 2 | 100 | 500 (shared) |
+| Food photo recognition | 2 | 5 | 50 (shared) |
+| AI recipe generation | 2 | 20 | 100 (shared) |
+| Manual logging | ✅ Unlimited | ✅ Unlimited | ✅ Unlimited |
+| Meal planning | Basic | Full | Full |
+| Voice quality | Standard | Neural | Neural |
+| Family members | 1 | 1 | Up to 5 |
+| Family dashboard | ✗ | ✗ | ✅ |
+| **Cost to serve** | ~₹8 | ~₹41 | ~₹267 |
+| **Gross margin** | — | **₹58** | **₹232** |
+
+Payments via **Razorpay recurring subscriptions** — UPI, cards, netbanking.
+Webhook-driven lifecycle: `subscription.charged` → `subscription.cancelled` → `subscription.paused`.
 
 ---
 
 ## Cost Engineering
 
-| Optimisation | Saving |
+| Optimisation | Impact |
 |-------------|--------|
 | Graviton2 (arm64) Lambda | 20% compute cost reduction |
-| On-demand DynamoDB | Pay-per-request, no idle cost |
+| On-demand DynamoDB | Zero idle cost, auto-scales |
 | S3 Glacier lifecycle (90 days) | 90% storage cost reduction for old photos |
-| API Gateway caching | 60% reduction in Lambda invocations |
-| CloudWatch log retention (7d dev / 30d prod) | Reduced log storage cost |
-| Voice audio caching (24h) | 70% TTS cost reduction |
-| Batch transcription | 50% cheaper than streaming STT |
+| API Gateway response caching | 60% reduction in Lambda invocations |
+| CloudWatch log retention (7d dev / 30d prod) | Bounded log storage cost |
+| Voice audio caching | 70% TTS cost reduction |
 | Usage limits per tier | Prevents runaway AI costs |
 
-Estimated cost per user per month:
-- Free tier: ~$0.10
-- Wellness (₹99): ~$0.50 (margin: ₹91)
-- FamilyCare (₹499): ~$3.25 (margin: ₹472)
+**Estimated gross margin at 1,000 users (mixed tiers): ~78%**
 
 ---
 
-## CI/CD Pipeline
+## Security Highlights
+
+- All endpoints protected by Cognito JWT authorizer
+- Phone-only auth — zero password storage
+- OTP tokens: DynamoDB TTL auto-deletes after 5 minutes
+- Razorpay credentials: AWS Secrets Manager (never in code or env vars)
+- S3: private bucket, pre-signed URLs (5-min expiry)
+- IAM: least-privilege role per Lambda function
+- Data isolation: all DynamoDB queries scoped by `user_id`
+- Flutter: user-scoped local storage (prevents cross-user data leakage)
+- Admin: separate Cognito user pool with MFA
+
+---
+
+## CI/CD
 
 ```
-GitHub Push → GitHub Actions workflow
+git push → GitHub Actions
         ↓
-SAM Build (Node.js Lambda packages)
+sam build  (Node.js Lambda packages)
         ↓
-SAM Deploy → CloudFormation stack update
+sam deploy (CloudFormation stack update)
         ↓
-Lambda functions updated (zero-downtime)
-        ↓
-Flutter build → APK signed (Android keystore)
-        ↓
-APK distributed (manual / Play Store)
+Zero-downtime Lambda updates
 ```
 
----
-
-## Security Design
-
-- All API endpoints protected by Cognito JWT authorizer
-- Phone-based auth — no password storage
-- OTP tokens stored in DynamoDB with TTL expiry
-- Razorpay credentials in AWS Secrets Manager (never in code)
-- S3 bucket: private, pre-signed URLs for food photos
-- IAM roles with least-privilege per Lambda function
-- User-scoped data isolation (all DynamoDB queries keyed by user_id)
-- Cross-user data leakage prevention (user-scoped local storage in Flutter)
-- Admin dashboard on separate Cognito user pool (admin-only access)
+Multi-environment: `dev` · `staging` · `prod` — all via SAM config parameters.
 
 ---
 
-## Screens (Flutter App)
+## App Screens (20)
 
-| Screen | Purpose |
-|--------|---------|
-| login_screen | Phone number entry |
-| otp_screen | OTP verification |
-| register_screen | New user onboarding |
-| home_screen | Dashboard with quick actions |
-| chat_screen | AI text chat |
-| voice_chat_screen | Voice assistant interface |
-| recipes_screen | Recipe library |
-| generate_recipe_screen | AI recipe generation |
-| recipe_detail_screen | Full recipe view |
-| planner_screen | Meal planner |
-| add_meal_screen | Add meal to plan |
-| food_log_screen | Nutrition log |
-| food_capture_screen | Photo-based food logging |
-| shelf_screen | Pantry/shelf management |
-| health_insights_screen | Health analytics |
-| wellness_reminder_screen | Reminder setup |
-| subscription_screen | Subscription management |
-| subscription_selection_screen | Tier selection + upgrade |
-| profile_screen | User profile |
-| settings_screen | App settings |
-
----
-
-## What Makes This Different
-
-**Built for India, not adapted for India.**
-- Indian food calorie database (not generic Western data)
-- 6 regional languages with natural voice responses
-- Indian payment gateway (Razorpay) with UPI + card support
-- Phone-based auth (no email required — matches Indian user behaviour)
-- Recipes seeded with vegetarian, egg, non-veg, vegan Indian cuisine
-
-**Production-grade serverless architecture.**
-- 13 Lambda functions, 12 DynamoDB tables, all on AWS SAM
-- Graviton2 arm64 for cost efficiency
-- X-Ray tracing, CloudWatch monitoring, structured logging
-- Multi-environment support (dev / staging / prod)
-
-**AI that knows your context.**
-- Bedrock AI responses are personalised to your shelf, meal history, and goals
-- Voice assistant understands intent and can act on it
-- Photo recognition identifies Indian food items
-
-**Founder-built, not agency-built.**
-- Designed, architected, and shipped solo
-- 90+ build versions iterated in production
-- Real users, real subscriptions, real data
+`login` · `otp` · `register` · `home` · `chat` · `voice_chat` · `recipes` · `generate_recipe` · `recipe_detail` · `planner` · `add_meal` · `food_log` · `food_capture` · `shelf` · `health_insights` · `wellness_reminder` · `subscription` · `subscription_selection` · `profile` · `settings`
 
 ---
 
 ## Roadmap
 
 | Phase | Feature | Status |
-|-------|---------|--------|
+|-------|---------|:------:|
 | Phase 1 | Admin Control Panel | ✅ Complete |
 | Phase 2 | Usage Tracking & Limits | ✅ Complete |
-| Phase 3 | Voice Action Execution | 🔄 In Progress |
-| Phase 4 | Family Health Dashboard (FamilyCare tier) | 📋 Planned |
+| Phase 3 | Voice Action Execution (auto-execute intents) | 🔄 In Progress |
+| Phase 4 | Family Health Dashboard | 📋 Planned |
 | Phase 5 | "Hey Cojaisy" Wake Word | 📋 Planned |
-| Phase 6 | Play Store Launch | 📋 Planned |
+| Phase 6 | Google Play Store Launch | 📋 Planned |
 
 ---
 
-## Links
+## Deep Dives
 
-- [Architecture Deep Dive](./architecture.md)
-- [AI & Voice Pipeline](./ai-voice.md)
-- [Subscription & Monetisation](./subscriptions.md)
-- [Security Design](./security.md)
-- [Infrastructure & Cost](./infrastructure.md)
+| Document | What's Inside |
+|----------|--------------|
+| [Architecture](./architecture.md) | System layers, API design, data model, Cognito custom auth, failure handling |
+| [AI & Voice Pipeline](./ai-voice.md) | Bedrock prompt engineering, voice pipeline, intent detection, food recognition |
+| [Subscriptions](./subscriptions.md) | Razorpay recurring billing, webhook lifecycle, usage tracking, admin analytics |
+| [Security](./security.md) | IAM per-Lambda table, data isolation, secrets management, known trade-offs |
+| [Infrastructure & Cost](./infrastructure.md) | SAM IaC, cost estimates, CI/CD, monitoring, multi-environment setup |
