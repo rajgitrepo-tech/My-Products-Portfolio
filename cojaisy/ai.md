@@ -132,7 +132,7 @@ Structured recipe returned:
   - Nutrition breakdown (calories, protein, carbs, fat)
   - Serving size
         ↓
-Saved to kiro-recipes table
+Saved to recipes table
         ↓
 Displayed in Flutter recipe detail screen
 ```
@@ -190,8 +190,7 @@ flutter_image_compress:
   - Quality: 85%
   - Format: JPEG
         ↓
-Image uploaded to S3:
-  food-photos/{user_id}/{timestamp}.jpg
+Image uploaded to S3 (user-scoped private path)
         ↓
 nutrition-log-handler Lambda
         ↓
@@ -210,7 +209,7 @@ Nova Vision response parsed
         ↓
 Bulk review screen — user confirms each item
         ↓
-Confirmed items logged to kiro-nutrition-logs
+Confirmed items logged to nutrition log
 ```
 
 ### Why Nova Vision Works Well for Indian Food
@@ -248,8 +247,7 @@ Flutter AudioRecorder
   - Sample rate: 16kHz (Transcribe optimal)
   - Max duration: 30 seconds
         ↓
-Audio uploaded to S3 via pre-signed URL
-  voice-input/{user_id}/{timestamp}.m4a
+Audio uploaded to S3 via pre-signed URL (user-scoped private path)
         ↓
 voice-handler Lambda (512MB, 30s timeout)
         ↓
@@ -268,8 +266,7 @@ bedrock-ai-handler invoked (full context assembly)
                      meal_plan | nutrition_query | general
         ↓
 Response text hashed (SHA-256)
-  Cache key: voice-cache/{hash}.mp3
-  S3 HEAD check → cache hit or miss
+  S3 cache check → cache hit or miss
         ↓
 Cache miss → AWS Polly:
   - Free tier: Standard voice

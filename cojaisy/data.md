@@ -19,8 +19,8 @@
 
 ## Table Schemas
 
-### kiro-users
-The central user record — health profile, subscription state, usage counters.
+### Users Table
+The central user record — health profile, subscription state, AI usage counters.
 
 ```
 user_id (PK)              ← Cognito sub (UUID)
@@ -38,7 +38,7 @@ locality                  ← city/region for regional cuisine context
 subscription_tier         ← free | wellness | familycare
 subscription_start_date
 subscription_end_date
-razorpay_subscription_id
+payment_subscription_id   ← billing reference
 voice_count_month         ← AI usage tracking (reset monthly)
 photo_count_month
 recipe_count_month
@@ -51,7 +51,7 @@ GSI: `phone_number-index` — enables Cognito custom auth challenge to look up u
 
 ---
 
-### kiro-auth-tokens
+### Auth Tokens Table
 Ephemeral OTP tokens. DynamoDB TTL handles cleanup automatically.
 
 ```
@@ -68,7 +68,7 @@ TTL on `expires_at` means no cleanup Lambda, no cron job, no stale tokens.
 
 ---
 
-### kiro-conversations
+### Conversations Table
 AI chat session metadata.
 
 ```
@@ -84,7 +84,7 @@ GSI: `user_id-index` — fetch all conversations for a user, sorted by `last_mes
 
 ---
 
-### kiro-messages
+### Messages Table
 Full conversation history — the context window for AI.
 
 ```
@@ -102,7 +102,7 @@ Query pattern: `conversation_id = X ORDER BY timestamp DESC LIMIT 10`
 
 ---
 
-### kiro-recipes
+### Recipes Table
 Recipe library — user-created, AI-generated, and pre-seeded.
 
 ```
@@ -129,7 +129,7 @@ GSI: `user_id-index` — fetch user's recipe library.
 
 ---
 
-### kiro-meal-plans
+### Meal Plans Table
 Daily meal planning records.
 
 ```
@@ -137,7 +137,7 @@ plan_id (PK)              ← UUID
 user_id                   ← GSI PK
 date                      ← YYYY-MM-DD
 meal_type                 ← breakfast | lunch | dinner | snack
-recipe_id                 ← reference to kiro-recipes
+recipe_id                 ← reference to recipes table
 meal_name                 ← display name
 nutrition                 ← JSON {calories, protein, carbs, fat}
 servings
@@ -149,7 +149,7 @@ GSI: `user_id-date-index` — fetch all meals for a user on a specific date.
 
 ---
 
-### kiro-nutrition-logs
+### Nutrition Logs Table
 Daily food intake records — manual entry and photo-based.
 
 ```
@@ -165,7 +165,7 @@ serving_size
 serving_unit
 meal_type                 ← breakfast | lunch | dinner | snack
 source                    ← manual | photo | recipe
-photo_s3_key              ← if source = photo
+photo_reference           ← if source = photo
 created_at
 ```
 
@@ -173,7 +173,7 @@ GSI: `user_id-date-index` — fetch all logs for a user on a date (today's nutri
 
 ---
 
-### kiro-shelf-items
+### Shelf Items Table
 Pantry inventory — the live input to AI recipe suggestions.
 
 ```
@@ -193,13 +193,13 @@ Query pattern for AI context: `user_id = X AND expiry_date < today + 7` (expirin
 
 ---
 
-### kiro-subscriptions
+### Subscriptions Table
 Billing records and subscription lifecycle.
 
 ```
 subscription_id (PK)      ← UUID
 user_id                   ← GSI PK
-razorpay_subscription_id  ← Razorpay reference
+payment_subscription_id   ← payment gateway reference
 tier                      ← wellness | familycare
 status                    ← created | active | cancelled | paused
 amount
@@ -208,14 +208,13 @@ start_date
 end_date
 next_billing_date
 cancelled_at
-admin_note                ← for manual overrides
 created_at
 updated_at
 ```
 
 ---
 
-### kiro-alarms
+### Alarms Table
 Wellness reminder schedules.
 
 ```
@@ -234,21 +233,23 @@ created_at
 
 ## S3 Storage Structure
 
+All objects are stored in a single private bucket, organised by data type and user identity:
+
 ```
-{bucket-name}/
+private-bucket/
 ├── food-photos/
-│   └── {user_id}/
-│       └── {timestamp}.jpg          ← food recognition photos
+│   └── {user_id}/          ← user-scoped, no cross-user access
+│       └── {timestamp}.jpg ← food recognition photos
 ├── voice-input/
-│   └── {user_id}/
-│       └── {timestamp}.m4a          ← voice query audio
+│   └── {user_id}/          ← user-scoped audio uploads
+│       └── {timestamp}.m4a ← voice query audio
 ├── voice-cache/
-│   └── {sha256_hash}.mp3            ← cached Polly responses (24h TTL)
+│   └── {content_hash}.mp3  ← cached Polly responses (24h TTL)
 └── transcripts/
-    └── {job_id}.json                ← Transcribe output (temp)
+    └── {job_id}.json       ← Transcribe output (auto-deleted after 1h)
 ```
 
-All objects accessed via pre-signed URLs (5-minute expiry). No public access.
+All objects accessed via pre-signed URLs (5-minute expiry). No public access. No permanent links.
 
 ---
 
@@ -260,11 +261,10 @@ The AI context pipeline runs these queries in parallel before every chat message
 const [user, shelfItems, expiringItems, todayNutrition, recentMeals, messages] =
   await Promise.all([
     // User profile
-    dynamodb.get({ TableName: USERS_TABLE, Key: { user_id } }),
+    dynamodb.get({ Key: { user_id } }),
 
     // Full shelf inventory
     dynamodb.query({
-      TableName: SHELF_ITEMS_TABLE,
       KeyConditionExpression: 'user_id = :uid',
       ExpressionAttributeValues: { ':uid': userId },
       Limit: 20
@@ -272,7 +272,6 @@ const [user, shelfItems, expiringItems, todayNutrition, recentMeals, messages] =
 
     // Items expiring in next 7 days
     dynamodb.query({
-      TableName: SHELF_ITEMS_TABLE,
       KeyConditionExpression: 'user_id = :uid',
       FilterExpression: 'expiry_date BETWEEN :today AND :future',
       ExpressionAttributeValues: {
@@ -284,7 +283,6 @@ const [user, shelfItems, expiringItems, todayNutrition, recentMeals, messages] =
 
     // Today's nutrition totals
     dynamodb.query({
-      TableName: NUTRITION_LOGS_TABLE,
       IndexName: 'user_id-date-index',
       KeyConditionExpression: 'user_id = :uid AND #date = :today',
       ExpressionAttributeValues: { ':uid': userId, ':today': today }
@@ -292,7 +290,6 @@ const [user, shelfItems, expiringItems, todayNutrition, recentMeals, messages] =
 
     // Recent meal history (3 days)
     dynamodb.query({
-      TableName: MEAL_PLANS_TABLE,
       IndexName: 'user_id-date-index',
       KeyConditionExpression: 'user_id = :uid AND #date >= :threeDaysAgo',
       ExpressionAttributeValues: { ':uid': userId, ':threeDaysAgo': threeDaysAgo }
@@ -300,7 +297,6 @@ const [user, shelfItems, expiringItems, todayNutrition, recentMeals, messages] =
 
     // Last 10 messages (conversation history)
     dynamodb.query({
-      TableName: MESSAGES_TABLE,
       IndexName: 'conversation_id-index',
       KeyConditionExpression: 'conversation_id = :cid',
       ExpressionAttributeValues: { ':cid': conversationId },

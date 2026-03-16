@@ -188,9 +188,9 @@ Three fully isolated environments, all defined in `samconfig.toml`:
 
 | Environment | Stack | Log Retention | Reserved Concurrency | Purpose |
 |-------------|-------|:-------------:|:-------------------:|---------|
-| dev | kiro-stack-dev | 7 days | 5 | Feature development |
-| staging | kiro-stack-staging | 14 days | 10 | Pre-production validation |
-| prod | kiro-stack-prod | 30 days | 50 | Live users |
+| dev | app-stack-dev | 7 days | 5 | Feature development |
+| staging | app-stack-staging | 14 days | 10 | Pre-production validation |
+| prod | app-stack-prod | 30 days | 50 | Live users |
 
 All environment-specific config passed as SAM parameters — zero hardcoded values in Lambda code.
 

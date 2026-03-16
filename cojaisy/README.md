@@ -241,18 +241,18 @@ Nova Vision           6 Indian languages
 
 | Table | What It Stores |
 |-------|---------------|
-| kiro-users | Profiles, health goals, dietary preference, subscription tier |
-| kiro-auth-tokens | OTP tokens with 5-min TTL (auto-deleted by DynamoDB) |
-| kiro-conversations | AI chat sessions |
-| kiro-messages | Full conversation history (context window for AI) |
-| kiro-recipes | Recipe library — user-created + AI-generated |
-| kiro-meal-plans | Daily and weekly meal plans |
-| kiro-nutrition-logs | Food logs with calorie and macro data |
-| kiro-shelf-items | Pantry inventory with expiry dates |
-| kiro-subscriptions | Billing records and subscription lifecycle |
-| kiro-alarms | Wellness reminder schedules |
-| kiro-consultants | *(legacy — being removed)* |
-| kiro-bookings | *(legacy — being removed)* |
+| users | Profiles, health goals, dietary preference, subscription tier |
+| auth-tokens | OTP tokens with 5-min TTL (auto-deleted by DynamoDB) |
+| conversations | AI chat sessions |
+| messages | Full conversation history (context window for AI) |
+| recipes | Recipe library — user-created + AI-generated |
+| meal-plans | Daily and weekly meal plans |
+| nutrition-logs | Food logs with calorie and macro data |
+| shelf-items | Pantry inventory with expiry dates |
+| subscriptions | Billing records and subscription lifecycle |
+| alarms | Wellness reminder schedules |
+| *(legacy table)* | *(being removed)* |
+| *(legacy table)* | *(being removed)* |
 
 ---
 
