@@ -33,7 +33,7 @@ the problem, the architecture decisions, the AI integration, the cloud infrastru
 <td width="50px" align="center">01</td>
 <td>
 
-### 🥗 [AI Health & Nutrition Assistant](./cojaisy/README.md)
+### 🥗 [AI Health & Nutrition Assistant](./ai-health-assistant/README.md)
 
 An intelligent, context-aware health companion built specifically for Indian households.
 The AI knows your pantry, your meals, your nutrition gaps, and your health goals —
