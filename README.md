@@ -2,7 +2,7 @@
 
 # 🚀 My Products Portfolio
 
-### AI-powered products built from zero to production — solo.
+### AI-powered products built from zero to production.
 
 *Real problems. Real users. Real infrastructure. Real impact.*
 
