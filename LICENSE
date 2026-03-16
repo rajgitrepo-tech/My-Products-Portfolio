@@ -2,21 +2,52 @@ Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International Licen
 
 Copyright (c) 2026 Rajasekaran Chandrasekaran (Raj)
 
-This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives
-4.0 International License (CC BY-NC-ND 4.0).
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+WHAT THIS LICENSE COVERS
+
+This license applies to the original work in this repository:
+
+  - Product design ideology and thinking
+  - Architecture decisions, patterns, and trade-off reasoning
+  - System design documentation and deep-dive writeups
+  - The structure, organisation, and presentation of this portfolio
+
+These are the original intellectual contributions of the author.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+WHAT THIS LICENSE DOES NOT COVER
+
+The following are owned by their respective companies and governed
+by their own terms of service, trademarks, and licenses:
+
+  - Amazon Web Services (AWS), Amazon Bedrock, Lambda, DynamoDB,
+    Cognito, S3, API Gateway, CloudWatch, X-Ray, SAM, Transcribe,
+    Polly, CloudFront, IAM, Secrets Manager, and all AWS services
+  - Flutter and Dart (Google LLC)
+  - Razorpay (Razorpay Software Pvt. Ltd.)
+  - GitHub Actions (GitHub Inc.)
+  - Any other third-party tools, frameworks, or services referenced
+
+References to these technologies are for documentation purposes only.
+No ownership or affiliation is claimed.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+LICENSE TERMS (CC BY-NC-ND 4.0)
 
 You are free to:
   Share — copy and redistribute the material in any medium or format
 
 Under the following terms:
-  Attribution   — You must give appropriate credit to the original author.
+  Attribution   — You must give appropriate credit to the author.
   NonCommercial — You may not use the material for commercial purposes.
-  NoDerivatives — If you remix, transform, or build upon the material,
-                  you may not distribute the modified material.
+  NoDerivatives — You may not remix, transform, or build upon the
+                  material and distribute the modified version.
 
-No additional restrictions — You may not apply legal terms or technological
-measures that legally restrict others from doing anything the license permits.
+Full license: https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
 
-Full license text: https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 THE CONTENT IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.
