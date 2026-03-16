@@ -415,7 +415,9 @@ Three environments: `dev` · `staging` · `prod` — all parameterised via SAM c
 
 | Document | What's Inside |
 |----------|--------------|
-| [Architecture](./architecture.md) | System layers, API design, data model, auth flow, failure handling |
-| [AI & Voice Pipeline](./ai-voice.md) | Bedrock prompt engineering, context assembly, voice pipeline, intent detection |
-| [Security](./security.md) | IAM per-Lambda table, data isolation, secrets management |
-| [Infrastructure & Cost](./infrastructure.md) | SAM IaC, cost breakdown, CI/CD, monitoring, multi-environment |
+| [Architecture](./architecture.md) | System layers, API design, Cognito custom auth, Lambda inventory, scalability path |
+| [AI Intelligence](./ai.md) | Bedrock Nova Chat/Text/Vision, context assembly pipeline, voice STT+TTS, prompt engineering, cost optimisation |
+| [Mobile App](./mobile.md) | Flutter architecture, 20 screens, service layer, voice UI components, build & release |
+| [Data Architecture](./data.md) | 12 DynamoDB schemas, S3 structure, context query pattern, data lifecycle |
+| [Security](./security.md) | IAM per-Lambda, data isolation, secrets management, auth design |
+| [Infrastructure & Cost](./infrastructure.md) | SAM IaC, cost at scale, CI/CD pipeline, monitoring, multi-environment |
