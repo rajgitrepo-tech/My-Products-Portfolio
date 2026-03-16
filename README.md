@@ -1,5 +1,7 @@
 <div align="center">
 
+> © 2026 Rajasekaran Chandrasekaran (Raj) — Licensed under [CC BY-NC-ND 4.0](./LICENSE). Viewing permitted. Commercial use, reproduction, or derivative works are not permitted without written permission.
+
 # 🚀 My Products Portfolio
 
 ### AI-powered products built from zero to production.
