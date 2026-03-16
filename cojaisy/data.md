@@ -7,6 +7,56 @@
 
 ---
 
+## What Data Is Collected — And Why
+
+This is a health product. Users share personal information — their weight, health goals, what they eat, what's in their kitchen. That data is the engine of the AI's intelligence. It is also a responsibility.
+
+Every field stored exists for a specific functional reason. Nothing is collected speculatively.
+
+| Data Category | What's Stored | Why It's Needed |
+|--------------|--------------|----------------|
+| Identity | Phone number, name | Account creation and OTP authentication |
+| Health profile | Age, gender, height, weight, BMI, dietary preference, health goals, allergies | Powers personalised AI recommendations — without this, the AI gives generic advice |
+| Pantry inventory | Ingredient names, quantities, expiry dates | AI uses this to suggest recipes and flag waste |
+| Meal history | What was eaten, when, nutritional values | AI uses 3-day history to spot nutrition gaps and patterns |
+| Nutrition logs | Daily food intake, calories, macros | Tracks progress against health goals; feeds AI context |
+| AI conversations | Message history (last 10 per session) | Gives the AI memory within a session — so it doesn't repeat itself |
+| Food photos | Images uploaded for recognition | Processed by AI Vision, then stored privately under user's path |
+| Voice audio | Audio clips for STT processing | Transcribed and discarded within 24 hours — not retained |
+| Billing | Subscription tier, payment reference | Manages access to paid features — no card data stored (handled by payment gateway) |
+| Wellness reminders | Scheduled notification times | Delivers user-configured health reminders |
+
+**What is NOT collected:**
+- No email address
+- No passwords (phone OTP only)
+- No location tracking or GPS data
+- No contacts or device data
+- No card numbers or payment credentials (processed entirely by the payment gateway)
+
+---
+
+## User Profile — The Core of Personalisation
+
+The user profile is the foundation of everything the AI does. It is created once during onboarding and updated by the user at any time.
+
+```
+Health profile fields:
+  dietary_preference  → vegetarian | egg | non-veg | vegan
+  health_goals        → weight_loss | muscle_gain | maintenance
+  age, gender         → used for calorie target calculation
+  height_cm, weight_kg, bmi → body metrics for nutritional targets
+  allergies           → exclusion list for recipe generation
+  locality            → regional cuisine context (e.g. South Indian vs North Indian)
+```
+
+This profile is:
+- Stored encrypted at rest in DynamoDB (AWS-managed encryption)
+- Accessible only to the authenticated user via their Cognito JWT
+- Never shared with third parties
+- Deletable by the user at any time (account deletion removes all records)
+
+---
+
 ## Design Principles
 
 - **On-demand capacity** — zero provisioned throughput, zero idle cost, auto-scales to any spike
@@ -307,6 +357,44 @@ const [user, shelfItems, expiringItems, todayNutrition, recentMeals, messages] =
 ```
 
 Six parallel DynamoDB reads assembled into a single dynamic system prompt — all before Bedrock is invoked.
+
+---
+
+## Data Protection & Encryption
+
+All user data is protected at every layer — in transit, at rest, and at the access control level.
+
+| Layer | Protection |
+|-------|-----------|
+| In transit | All API calls over HTTPS — no unencrypted channels |
+| At rest — DynamoDB | AWS-managed encryption (AES-256) on all 12 tables |
+| At rest — S3 | Server-side encryption on all objects in the private bucket |
+| Access control | Every DynamoDB query requires `user_id` — no query can return another user's data |
+| File access | All S3 objects accessed via pre-signed URLs with 5-minute expiry — no permanent links |
+| Device | All locally cached data prefixed with `user_id` — switching accounts clears previous user's data |
+| Credentials | Payment keys and SMS keys stored in AWS Secrets Manager — never in code or config |
+
+---
+
+## Account Deletion & Data Removal
+
+When a user deletes their account, all personal data is removed:
+
+| Data | Action on Deletion |
+|------|--------------------|
+| User profile (health data, goals, preferences) | Deleted from database |
+| Conversation history and AI messages | Deleted from database |
+| Nutrition logs | Deleted from database |
+| Meal plans | Deleted from database |
+| Pantry inventory | Deleted from database |
+| User-created recipes | Deleted from database |
+| Wellness reminders | Deleted from database |
+| Food photos | Deleted from S3 |
+| Voice audio | Already auto-deleted within 24h — nothing to remove |
+| Cognito account | Deleted from user pool — phone number released |
+| Subscription record | Marked cancelled, retained for billing audit trail only |
+
+Pre-seeded recipes (not created by the user) remain in the shared library — they contain no personal data.
 
 ---
 
