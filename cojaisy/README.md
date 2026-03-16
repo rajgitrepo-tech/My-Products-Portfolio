@@ -251,8 +251,8 @@ Nova Vision           6 Indian languages
 | shelf-items | Pantry inventory with expiry dates |
 | subscriptions | Billing records and subscription lifecycle |
 | alarms | Wellness reminder schedules |
-| *(legacy table)* | *(being removed)* |
-| *(legacy table)* | *(being removed)* |
+| consultants | Legacy — scheduled for removal |
+| bookings | Legacy — scheduled for removal |
 
 ---
 
@@ -364,7 +364,7 @@ Three environments: `dev` · `staging` · `prod` — all parameterised via SAM c
 
 ---
 
-## App Screens (20 Screens, Production)
+## App Screens (26 Screens, Production)
 
 | Screen | Purpose |
 |--------|---------|
@@ -381,13 +381,19 @@ Three environments: `dev` · `staging` · `prod` — all parameterised via SAM c
 | add_meal | Add meal to plan |
 | food_log | Nutrition log |
 | food_capture | Photo-based food identification |
+| bulk_review | Review AI-identified food items |
+| select_recipe_for_log | Log a saved recipe as a meal |
 | shelf | Pantry manager |
+| add_shelf_item | Add item to pantry |
 | health_insights | Nutrition trends and analytics |
 | wellness_reminder | Reminder setup |
+| wellness_reminders | Manage all active reminders |
 | subscription | Subscription management |
 | subscription_selection | Tier selection and upgrade |
 | profile | User health profile |
 | settings | App settings |
+| navigation | Bottom navigation shell |
+| update_required | Force update gate for breaking API changes |
 
 ---
 
@@ -417,7 +423,7 @@ Three environments: `dev` · `staging` · `prod` — all parameterised via SAM c
 |----------|--------------|
 | [Architecture](./architecture.md) | System layers, API design, Cognito custom auth, Lambda inventory, scalability path |
 | [AI Intelligence](./ai.md) | Bedrock Nova Chat/Text/Vision, context assembly pipeline, voice STT+TTS, prompt engineering, cost optimisation |
-| [Mobile App](./mobile.md) | Flutter architecture, 20 screens, service layer, voice UI components, build & release |
+| [Mobile App](./mobile.md) | Flutter architecture, 26 screens, service layer, voice UI components, build & release |
 | [Data Architecture](./data.md) | 12 DynamoDB schemas, S3 structure, context query pattern, data lifecycle |
 | [Security](./security.md) | IAM per-Lambda, data isolation, secrets management, auth design |
 | [Infrastructure & Cost](./infrastructure.md) | SAM IaC, cost at scale, CI/CD pipeline, monitoring, multi-environment |

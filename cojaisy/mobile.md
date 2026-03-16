@@ -1,6 +1,6 @@
 # Mobile App — Deep Dive
 
-> 20 production screens. Native Android performance. Built with Flutter for a market of 600M+ Android users in India.
+> 26 production screens. Native Android performance. Built with Flutter for a market of 600M+ Android users in India.
 
 [![Flutter](https://img.shields.io/badge/Flutter-Dart-02569B?style=flat&logo=flutter&logoColor=white)](https://flutter.dev)
 [![Android](https://img.shields.io/badge/Platform-Android-3DDC84?style=flat&logo=android&logoColor=white)](https://developer.android.com)
@@ -57,7 +57,7 @@ main.dart
 
 ---
 
-## Screen Inventory (20 Screens)
+## Screen Inventory (26 Screens)
 
 ### Authentication Flow
 | Screen | Purpose |

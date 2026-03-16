@@ -31,8 +31,7 @@ template.yaml
   └── Outputs
       ├── ApiGatewayUrl
       ├── CognitoUserPoolId
-      ├── CognitoUserPoolClientId
-      └── S3BucketName
+      └── CognitoUserPoolClientId
 ```
 
 Deploy any environment in a single command:
